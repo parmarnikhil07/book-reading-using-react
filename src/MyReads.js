@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 
 class MyReads extends Component {
   render(){
+    console.log(this.props.books);
     let categories = {'currentlyReading':[],'wantToRead':[],'read':[]};
     this.props.books.map((item, i) => {
-          var Author = item.authors && item.authors.map(function(auth, j) {
+          let Author = item.authors && item.authors.map(function(auth, j) {
           return (
                   <div key={j} className="book-authors">{auth}</div>
               )
@@ -39,6 +39,9 @@ class MyReads extends Component {
           }
           return categories;
       });
+      let bookshelf = {'currentlyReading':'Currently Reading','wantToRead':'Want to Read','read':'Read'}
+      let bookDiv = [];
+      let j = 0;
     return (
       <div className="app">
           <div className="list-books">
@@ -47,34 +50,27 @@ class MyReads extends Component {
             </div>
             <div className="list-books-content">
               <div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Currently Reading</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      {categories.currentlyReading}
-                    </ol>
-                  </div>
-                </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Want to Read</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      {categories.wantToRead}
-                    </ol>
-                  </div>
-                </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Read</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      {categories.read}
-                    </ol>
-                  </div>
-                </div>
+                {
+                  Object.keys(bookshelf).forEach(function (key) {
+                    let obj = bookshelf[key];
+                    let book = (
+                     <div key={key} className="bookshelf">
+                       <h2 className="bookshelf-title">{obj}</h2>
+                       <div className="bookshelf-books">
+                         <ol className="books-grid">
+                           {categories[key]}
+                         </ol>
+                       </div>
+                     </div>
+                     )
+                     bookDiv[j++] = book;
+                  })
+                }
+                {bookDiv}
               </div>
             </div>
             <div className="open-search">
-              <a href="/search" onClick={(event) => this.props.searchData('')}>Add a book</a>
+              <a href="/search">Add a book</a>
             </div>
           </div>
 

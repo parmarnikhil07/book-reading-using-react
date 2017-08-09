@@ -18,11 +18,11 @@ class App extends React.Component {
   componentDidMount(e){
     if(this.state.books.length === 0) {
       BooksAPI.getAll().then(
-        function( books ) {
+        ( books ) => {
           if(books.length>0){
-            this.setState({books:books})
+            this.setState({books})
           }
-      }.bind(this));
+      });
     }
   }
 
@@ -31,10 +31,11 @@ class App extends React.Component {
   * @param {obj} item - the object of book
   * @param {string} value - shelf value
   */
-  update(item, value) {
-    var books = this.state.books;
-    BooksAPI.update(item, value).then(function(response){
-      var index = '';
+  update = (item, value) => {
+    let books = this.state.books;
+    BooksAPI.update(item, value).then(
+      (response) => {
+      let index = '';
       books.forEach(function(s, sidx) {
         if(item.id === s.id) {
           index = sidx;
@@ -47,7 +48,7 @@ class App extends React.Component {
         books.push(item);
       }
       this.setState({books});
-    }.bind(this));
+    });
   }
   /**
   * @description Get value from the text field and make search API call and set status accordingly.
@@ -75,19 +76,13 @@ class App extends React.Component {
       <Route exact path='/' render={() => (
         <MyReads
         books={this.state.books}
-        onUpdate={(item, value) => {
-          this.update(item, value)
-        }}
+        onUpdate={this.update}
       />)}
       />
     <Route path='/search' render={({ history}) => (
         <Search
-          onSearch={(value) => {
-            this.searchData(value)
-          }}
-          onUpdate={(item, value) => {
-            this.update(item, value)
-          }}
+          onSearch={this.searchData}
+          onUpdate={this.update}
           searchBooks={this.state.searchBooks}
           books={this.state.books}
         />
